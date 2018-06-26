@@ -5,22 +5,28 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
 
-type Marked = Blank | X | O
+type Marked
+    = Blank
+    | X
+    | O
+
+
+type alias Row =
+    List Marked
+
 
 type alias Model =
-    List Marked
-    -- List (List Marked)
+    List Row
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( 
-        -- [
-        [Blank, Blank, Blank]
-        -- , [Blank, Blank, Blank]
-        -- , [Blank, Blank, Blank]
-    -- ]
-    , Cmd.none )
+    ( [ [ Blank, Blank, Blank ]
+      , [ Blank, Blank, Blank ]
+      , [ Blank, Blank, Blank ]
+      ]
+    , Cmd.none
+    )
 
 
 
@@ -43,9 +49,13 @@ update message model =
 
 
 view : Model -> Html Msg
-view model = 
-    div [] (List.map viewMarked model)
+view model =
+    div [] (List.map oneRow model)
 
+
+oneRow : Row -> Html Msg
+oneRow hmmm =
+    List.map viewMarked hmmm |> (\x -> div [] x)
 
 
 viewMarked : Marked -> Html Msg
@@ -53,7 +63,10 @@ viewMarked marked =
     case marked of
         Blank ->
             text "Blanco"
+
         X ->
-            text "X"
-        O -> 
-            text "O"
+            text "__X__"
+
+        O ->
+            text "__O__"
+
