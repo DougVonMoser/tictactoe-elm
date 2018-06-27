@@ -1,0 +1,19 @@
+i have an array of stuff
+i need to translate that to a view
+if my div has an array in it what happens
+div [] []
+thats the fucking array!!! okay
+
+
+i want it to be
+div [] [
+    div [] ["x", "x", "x"]
+    , div [] ["o", "x", "o"]
+    , div [] ["x", "x", "x"]
+]
+
+now i need each Blank element to be able to give me its location??
+location? 
+can each element own its state??
+no. youd want all the state in the state. 
+can each blanco have its own submodel
