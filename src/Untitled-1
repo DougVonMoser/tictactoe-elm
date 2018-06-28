@@ -16,4 +16,56 @@ now i need each Blank element to be able to give me its location??
 location? 
 can each element own its state??
 no. youd want all the state in the state. 
-can each blanco have its own submodel
+can each blanco have its own submodel?  not sure i want that
+
+i want to pass a winner state to the actual cell
+
+also checkWinner has to return more than a bool. 
+    i need to tom petty:
+        - did x win?
+        - did O win?
+        - which cells?
+
+for now though, bool works and throw it in a span
+
+X - O
+X - O
+X - O
+
+[ 
+    [ Blank ( 0 ), Blank ( 1 ), Blank ( 2 ) ]
+    , [ Blank ( 3 ), Blank ( 4 ), Blank ( 5 ) ]
+    , [ Blank ( 6 ), Blank ( 7 ), Blank ( 8 ) ]
+]
+
+firstThingsMatched [0,3,6] [0,3,6,8]
+List.map () a
+    List.all (List.member dingy b) a
+    
+b
+[0,3,6,8] 
+
+a
+[
+[0,3,6]
+,[1,4,7]
+,[2,5,8]
+,[0,1,2]
+,[3,4,5]
+,[6,7,8]
+,[0,4,8]
+,[2,4,6]
+]
+Horz
+
+Diags
+
+flatten the board array
+
+get all x indeces first, check against the winning combos -> XWon
+then get y indeces, check them against winning combos -> OWon
+else if full board? -> Cats
+else -> Playing
+
+ahhh there will be more than 3 ints
+lol sweet 

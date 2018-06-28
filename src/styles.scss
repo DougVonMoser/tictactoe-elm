@@ -20,3 +20,17 @@ header {
 button {
     margin-right: 15px;
 }
+
+.row {
+    height: 25px;
+    content: "";
+}
+
+.cell {
+    vertical-align: top;
+    height: 100%;
+    text-align: center;
+    display: inline-block;
+    min-width: 45px;
+    border: solid black 1px;
+}
