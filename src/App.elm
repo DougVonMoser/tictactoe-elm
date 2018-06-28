@@ -33,7 +33,7 @@ type alias Board =
 type alias Model =
     { board : Board
     , turn : Turn
-    , won: Bool
+    , won: GameStatus
     }
 
 
@@ -45,7 +45,7 @@ init =
             , [ Blank ( 2, 0 ), Blank ( 2, 1 ), Blank ( 2, 2 ) ]
             ]
       , turn = XTurn
-      , won = False
+      , won = Playing
       }
     , Cmd.none
     )
@@ -57,7 +57,7 @@ init =
 
 type Msg
     = Play ( Int, Int )
-
+    | Reset
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
@@ -65,7 +65,7 @@ update message model =
         Play lokey ->
             let
                 updatedBoard =
-                    (List.map (List.map (idk2 lokey model.turn)) model.board)
+                    List.map (List.map (idk2 lokey model.turn)) model.board
 
                 newTurn =
                     case model.turn of
@@ -79,38 +79,42 @@ update message model =
                 Playing ->
                     ( { model | turn = newTurn, board = updatedBoard }, Cmd.none )
                 XWon ->
-                    ( { model | won = True, board = updatedBoard}, Cmd.none )
+                    ( { model | won = XWon, board = updatedBoard}, Cmd.none )
                 OWon ->
-                    ( { model | won = True, board = updatedBoard}, Cmd.none )
+                    ( { model | won = OWon, board = updatedBoard}, Cmd.none )
+        Reset ->
+            init
 
 checkWinner : Board -> GameStatus
 checkWinner boardy =
     let
         flatAndNumbedBoard = 
-            ( List.indexedMap (,) (List.foldr (++) [] boardy) )
+            List.indexedMap (,) (List.foldr (++) [] boardy)
         xes =
             List.filterMap xflattener flatAndNumbedBoard
+        oes =
+            List.filterMap oflattener flatAndNumbedBoard
+
     in
         if bigBoyChecker xes winnerWinners then
             XWon
-        else
+        else if bigBoyChecker oes winnerWinners then
+            OWon
+        else 
             Playing
 
 
 bigBoyChecker : List Int -> List (List Int) -> Bool
-bigBoyChecker playIdxs winTruth =
-    List.any (firstListMembersOfSecond playIdxs) winTruth
+bigBoyChecker playIdxs =
+    List.any (firstListMembersOfSecond playIdxs)
 
--- is all of a in b ?
 firstListMembersOfSecond : List Int -> List Int -> Bool
-firstListMembersOfSecond b a =
-    List.all (listMemberSwitch b) a
+firstListMembersOfSecond b =
+    List.all (listMemberSwitch b)
 
 listMemberSwitch : List a -> a -> Bool
 listMemberSwitch collection val =
     List.member val collection
-
-
 
 
 xflattener : ( Int, Marked ) -> Maybe Int
@@ -167,11 +171,20 @@ idk2 lokey turny marky =
 
 view : Model -> Html Msg
 view model =
-    if model.won then
-        text "someone won!"
-    else
-        div [] (List.map oneRow model.board)
+    case model.won of
+        Playing ->
+            div [] (List.map oneRow model.board)
+        _ ->
+            div [] [
+                winText model.won
+            , button [onClick Reset] [text "reset!"]]
 
+winText : GameStatus -> Html msg
+winText whowon =
+    if whowon == XWon then
+        text "X won, yay!"
+    else
+        text "O won, yay!"
 
 oneRow : Row -> Html Msg
 oneRow hmm =
