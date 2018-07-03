@@ -93,19 +93,16 @@ update message model =
 
                         OTurn ->
                             XTurn
+                
+                newStatus =
+                    checkWinner updatedBoard
             in
-                case checkWinner updatedBoard of
+                case newStatus of
                     Playing ->
                         ( { model | turn = newTurn, board = updatedBoard }, Cmd.none )
 
-                    XWon ->
-                        ( { model | won = XWon, board = updatedBoard }, Cmd.none )
-
-                    OWon ->
-                        ( { model | won = OWon, board = updatedBoard }, Cmd.none )
-
-                    CatsGame ->
-                        ( { model | won = CatsGame, board = updatedBoard }, Cmd.none )
+                    _ ->
+                        ( { model | won = newStatus, board = updatedBoard }, Cmd.none )
 
 
         Reset ->
@@ -127,7 +124,7 @@ checkWinner boardy =
         if bigBoyChecker xes winnerWinners then
             XWon
 
-        -- this can be more robust
+        -- this can be more robust, supes checking if cats game
         else if List.length xes == 5 then
             CatsGame
         else if bigBoyChecker oes winnerWinners then
